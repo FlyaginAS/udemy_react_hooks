@@ -1,11 +1,9 @@
-import  React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
+import  React,  {useState, Component, useEffect} from 'react';
 
 const App = ()=>{
     const [value, setValue] = useState(0);
     const [visible, setVisible]= useState(true);
-
-
 
     if(visible){
         return (
@@ -16,7 +14,8 @@ const App = ()=>{
                 <button
                     onClick={()=>setVisible(false)}
                 >hide</button>
-                <Notification />
+                <ClassCounter value={value}/>
+                <HookCounter value={value} />
             </div>
         );
     } else {
@@ -25,31 +24,30 @@ const App = ()=>{
 };
 
 const HookCounter = ({value})=>{
-    //componentDidMount
     useEffect(()=>{
-        console.log('did mount');
-        return ()=>console.log('unmount');
+        console.log('useEffect()');
+
+        return ()=>{
+            console.log('clear');
+        };
     }, []);
-
-    useEffect(()=> console.log('did update'));
-
-
-
-    return <p>{value}</p>;
+    return <p>{value}</p>
 };
 
-const Notification = ()=>{
-    const [visible, setVisible] = useState(true);
 
-    useEffect(()=>{
-        let id=setTimeout(()=>{
-            setVisible(false);
-        }, 1500);
-
-        return ()=> clearTimeout(id);
-    }, []);
-
-    return visible ?   <div><p>Hello</p></div> : null;
-};
+class ClassCounter extends  Component{
+    componentDidMount(){
+        console.log('class: mount');
+    }
+    componentDidUpdate(props){
+        console.log('class: update');
+    }
+    componentWillUnmount(){
+        console.log('class: unmount');
+    }
+    render(){
+        return <p>{this.props.value}</p>;
+    }
+}
 
 ReactDOM.render(<App/>, document.querySelector('#root'));
