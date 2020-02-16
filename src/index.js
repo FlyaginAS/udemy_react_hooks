@@ -24,10 +24,8 @@ const App = ()=>{
     }
 };
 
-const PlanetInfo = ({id}) => {
+usePlanetInfo = (id)=>{
     const  [name, setName]= useState('Planet Name');
-
-
     useEffect(()=>{
         let cancelled = false;
         fetch(`https://swapi.co/api/planets/${id}`)
@@ -36,11 +34,16 @@ const PlanetInfo = ({id}) => {
         return ()=> cancelled= true;
     }, [id]);
 
+    return  name;
+};
 
+const PlanetInfo = ({id}) => {
+    const name= usePlanetInfo(id);
 
     return (
-        <div>{id} - {name}</div>
+        <div>{id}-{name}</div>
     );
+
 };
 
 ReactDOM.render(<App/>, document.querySelector('#root'));
